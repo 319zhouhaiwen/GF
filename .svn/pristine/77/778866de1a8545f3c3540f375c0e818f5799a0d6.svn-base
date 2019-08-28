@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="mapper.login.Aloginmapper"> 
+	
+	
+	<select id="acheckUser" resultType="int" parameterType="java.util.Map">
+		select count(*) from gf_account where account=#{account} and password=#{password}
+	</select>	
+	
+	
+</mapper>

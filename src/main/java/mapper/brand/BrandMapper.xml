@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.brand.BrandMapper">  <!-- 命名空间  放接口路径-->
+	
+	<select id="select" parameterType="java.util.Map" resultType="entity.brand.Brand">
+		select * from gf_brand  
+		<where>
+			<if test="name != null and name != ''">
+				brand_name like concat('%',#{name},'%')
+			</if>
+		</where>
+		LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<select id="brandCount" parameterType="java.lang.String" resultType="int">
+		select count(*) from gf_brand where brand_name 
+		<if test=" value != null and value != ''">
+			like concat('%',#{value},'%')
+		</if>
+	</select>
+	
+	<select id="selectcode" parameterType="java.lang.String" resultType="java.lang.String">
+		select code from gf_brand where brand_name = #{name}
+	</select>
+	
+	<insert id="insert" parameterType="entity.brand.Brand">
+		insert into gf_brand (brand_name,brand_tel,code,brand_url) values (#{brand_name},#{brand_tel},#{code},#{brand_url})
+	</insert>
+	
+	<update id="update" parameterType="entity.brand.Brand">
+		update gf_brand set brand_name = #{brand_name},brand_tel = #{brand_tel},brand_url = #{brand_url} where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from gf_brand where id = #{id}
+	</delete>
+	
+	<delete id="deletegoods" parameterType="java.lang.String">
+		delete from gf_goods where type_code = #{code}
+	</delete>
+	
+	<update id="deleteag" parameterType="java.lang.String">
+		update gf_agent set brand_name = null ,brand_code = null where brand_code = #{code}
+	</update>
+	
+	<select id="get" parameterType="int" resultType="entity.brand.Brand">
+		select * from gf_brand where id = #{id}
+	</select>
+	
+	<select id="count" parameterType="java.lang.String" resultType="int">
+		select count(*) from gf_brand where brand_name = #{name}
+	</select>
+	
+	<select id="query" resultType="entity.brand.Brand">
+		select * from gf_brand
+	</select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.goodsreciew.GoodsReciewMapper">
+	
+	<!-- 查询所有 -->
+	<select id="query" resultType="entity.goodsreciew.GoodsReciewEntity">
+		select id,goods_code as goodsCode,goods_name as goodsName,goods_price as goodsPrice,goods_num as goodsNum,goods_path as goodsPath,goods_describe as goodsDescribe,goods_color as goodsColor,type_code as typeCode,agent_code as agentCode,goods_to as goodsTo from GF_goods_reciew
+	</select>
+	
+	<!-- 模糊查询 -->
+	<select id="query3" resultType="entity.goodsreciew.GoodsReciewEntity">
+		select id,goods_code as goodsCode,goods_name as goodsName,goods_price as goodsPrice,goods_num as goodsNum,goods_path as goodsPath,goods_describe as goodsDescribe,goods_color as goodsColor,type_code as typeCode,agent_code as agentCode,goods_to as goodsTo from GF_goods_reciew
+			<if test="dataName != null and dataName != ''">
+				where goods_name like  concat('%',#{dataName},'%')
+			</if>
+				LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<!-- 查出模糊查询的值一共有多少条数据 -->
+	<select id="pageCount" parameterType="java.lang.String" resultType="int">
+		select count(*) from GF_goods_reciew 
+		<if test="value !=null and value!=''" >
+			<where>
+				 goods_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+	
+
+		<!-- 传入一个ID返回一个List -->
+	<select id="query1" parameterType="int" resultType="entity.goodsreciew.GoodsReciewEntity">
+		select id,goods_code as goodsCode,goods_name as goodsName,goods_price as goodsPrice,goods_num as goodsNum,goods_path as goodsPath,goods_describe as goodsDescribe,goods_color as goodsColor,type_code as typeCode,agent_code as agentCode,goods_to as goodsTo from GF_goods_reciew where id=#{id}
+	</select>
+	
+	<!-- 判断名字是否重复 -->
+	<select id="query4" parameterType="java.lang.String" resultType="int">
+		select count(*) from GF_goods_reciew where goods_name=#{name}
+	</select>
+	
+	
+	<select id="query5" resultType="int">
+		select count(*) from GF_goods_reciew where goods_name=#{name} and id!=#{id}
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from GF_goods_reciew where id=#{id}
+	</delete>
+	
+	<!-- 新增 -->
+	<insert id="add">
+		insert into gf_goods_reciew(goods_code,goods_name,goods_price,goods_num,goods_path,goods_describe,goods_color,type_code,agent_code,goods_to)values(#{goodsCode},#{goodsName},#{goodsPrice},#{goodsNum},#{goodsPath},#{goodsDescribe},#{goodsColor},#{typeCode},#{agentCode},#{goodsTo})
+	</insert>
+	
+	
+	<update id="update">
+		update GF_goods_reciew set goods_code=#{goodsCode},goods_name=#{goodsName},goods_price=#{goodsPrice},goods_num=#{goodsNum},goods_path=#{goodsPath},goods_describe=#{goodsDescribe},goods_color=#{goodsColor},type_code=#{typeCode},agent_code=#{agentCode},goods_to=#{goodsTo} where id=#{id}
+	</update>
+	
+	
+
+</mapper>

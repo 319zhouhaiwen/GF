@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.csr.CsrMapper">
+	
+	<!-- 查询 -->
+	<select id="queryAll" resultType="entity.csr.CsrEntity" parameterType="java.util.Map">
+		select id,csr_name csrName,csr_sex csrSex,csr_age csrAge,csr_tel csrTel,csr_path csrPath,csr_status csrStatus,emp_code empCode  from gf_csr
+		<if test ="csrName != null and csrName !=''">
+			where csr_name like concat('%',#{csrName},'%')
+		</if>
+		limit #{pageNow},#{pageSize}
+	</select>
+	
+	
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="entity.csr.CsrEntity">
+		insert into gf_csr(csr_name,csr_sex,csr_age,csr_tel,csr_path,csr_status,emp_code)values(#{csrName},#{csrSex},#{csrAge},#{csrTel},#{csrPath},#{csrStatus},#{empCode})
+	</insert>
+	
+	
+	<!-- 删除 -->
+	<delete id="deleCsr" parameterType="int">
+		delete from gf_csr where id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="updateCsr" parameterType="entity.csr.CsrEntity">
+		update gf_csr set csr_name = #{csrName},csr_sex = #{csrSex},csr_age = #{csrAge},csr_tel = #{csrTel},csr_path = #{csrPath},csr_status = #{csrStatus},emp_code = #{empCode} where id = #{id}
+	</update>
+	
+	
+	
+	<!-- 根据id回显数据 -->
+	<select id="queryCsrId" parameterType="int" resultType="entity.csr.CsrEntity">
+		select id,csr_name csrName,csr_sex csrSex,csr_age csrAge,csr_tel csrTel,csr_path csrPath,csr_status csrStatus,emp_code empCode from gf_csr where id = #{id}
+	</select>
+	
+	
+	<!--查询一共多少条数据 -->
+	<select id="queryCount" parameterType="java.lang.String" resultType="int">
+		select count(*) from gf_csr 
+		<if test="value != null and value != ''">
+			<where>
+				csr_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+	
+	
+	
+		<!-- 查询 -->
+	<select id="queryAllExcel" resultType="entity.csr.CsrEntity" >
+		select id,csr_name csrName,csr_sex csrSex,csr_age csrAge,csr_tel csrTel,csr_path csrPath,csr_status csrStatus,emp_code empCode  from gf_csr
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.order.OrderMapper"><!--接口的路径 -->
+
+	<resultMap type="entity.order.OrderEntity" id="orderentity">
+		<id property="id" column="id" />
+		<result property="orderCode" column="order_code" />
+		<result property="orderDate" column="order_date" />
+		<result property="shippingAddr" column="shipping_addr" />
+		<result property="receivingAddr" column="receiving_addr" />
+		<result property="receiver" column="receiver" />
+		<result property="goodsNum" column="goods_num" />
+		<result property="goodsPrice" column="goods_price" />
+		<result property="orderStatus" column="order_status" />
+		<result property="receiptStatus" column="receipt_status" />
+		<result property="receiptTime" column="receipt_time" />
+		<result property="paymentStatus" column="payment_status" />
+		<result property="logisticsCode" column="logistics_code" />
+		<result property="expressCode" column="express_code" />
+		<result property="payment" column="payment" />
+		<result property="goodsName" column="goods_name" />
+		<result property="goodsCode" column="goods_code" />
+		<result property="orderDescride" column="order_descride" />
+		<result property="userCode" column="user_code" />
+	</resultMap>
+	<select id="selectqt" parameterType="String"
+		resultMap="orderentity">
+		select * from gf_order where user_code=#{name} and deletes=1
+	</select>
+	<insert id="insert" parameterType="entity.order.OrderEntity">
+		insert into
+		gf_order(order_code,order_date,shipping_addr,receiving_addr,receiver,goods_num,goods_price,order_status,receipt_status,receipt_time,payment_status,logistics_code,express_code,payment,goods_name,user_code,deletes,goods_code,order_descride)values(#{orderCode},#{orderDate},#{shippingAddr},#{receivingAddr},#{receiver},#{goodsNum},#{goodsPrice},#{orderStatus},#{receiptStatus},#{receiptTime},#{paymentStatus},#{logisticsCode},#{expressCode},#{payment},#{goodsName},#{userCode},#{deletes},#{goodsCode},#{orderDescride});
+	</insert>
+	<update id="update" parameterType="entity.order.OrderEntity">
+		update gf_order
+		<set>
+			<if test="receivingAddr !='' and receivingAddr !=null">
+				receiving_addr=#{receivingAddr},
+			</if>
+			<if test="receiver!=null and receiver!=''">
+				receiver=#{receiver},
+			</if>
+		</set>
+		<where>
+		<if test="id !=null and id !=''">
+			id=#{id}
+		</if>
+		</where>
+	</update>
+
+	<delete id="delete" parameterType="int">
+		update gf_order set
+		deletes='2' where id=#{id}
+	</delete>
+	<select id="selectcount" parameterType="java.util.Map"
+		resultType="int">
+		select count(*) from gf_order where 1=1
+		<if test="lisk != null and lisk !='' ">
+			and
+			concat(receiver,receiving_addr,order_code,order_date,shipping_addr,goods_num,goods_price,order_status,receipt_status,receipt_time)
+			like '%${lisk}%'
+		</if>
+	</select>
+	<select id="list" parameterType="java.util.Map" resultMap="orderentity">
+		select * from gf_order where 1=1
+		<if test="lisk != null and lisk !='' ">
+			and
+			concat(receiver,receiving_addr,order_code,order_date,shipping_addr,goods_num,goods_price,order_status,receipt_status,receipt_time)
+			like '%${lisk}%'
+		</if>
+		limit #{a},#{b}
+	</select>
+
+	<select id="get" parameterType="int" resultMap="orderentity">
+		select * from
+		gf_order where id=#{id}
+	</select>
+	<update id="OrderStatus" parameterType="java.util.Map">
+		update gf_order set
+		order_status=? where not receipt_status='1' and id=#{id}
+	</update>
+	<update id="receiptStatus" parameterType="int">
+		update  gf_order set receipt_status= 1  where not order_status=1 and id=#{id}
+	</update>
+	<select id="ras" resultMap="orderentity">
+		select*from gf_order
+	</select>
+</mapper>

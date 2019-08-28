@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.project.ProjectMapper">  <!-- 命名空间  放接口路径-->
+	
+	<!-- 循环查出正文内容 -->
+	<select id="select" parameterType="int" resultType="String">
+		select article_text from gf_article where id = #{id}
+	</select>
+	
+	<!-- 模糊查询,分页 -->
+	<select id="query" resultType="entity.project.ProjectEntity">
+		select * from gf_article
+		<!-- projectFuzzy  pageNow   pageEntity 为map键不是字段名-->
+		<if test=" projectFuzzy != null and projectFuzzy != '' ">
+			where article_title like concat( '%' , #{projectFuzzy} , '%')
+		</if>
+		LIMIT #{pageNow},#{pageEntity}
+		
+	</select>
+	
+	
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="entity.project.ProjectEntity">
+		insert into gf_article(article_code,article_title,article_text,goods_code)
+		values(#{article_code},#{article_title},#{article_text},#{goods_code})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="entity.project.ProjectEntity">
+		update gf_article
+		<set>
+			article_title = #{article_title},article_text = #{article_text}
+			<where>
+				id = #{id}
+			</where>
+		</set>
+	</update>
+	
+	<!-- 修改回显 -->
+	<select id="update1" parameterType="int" resultType="entity.project.ProjectEntity">
+		select * from gf_article
+		<where>
+			id = #{id}
+		</where>
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="INTEGER">
+		delete from gf_article
+		<where>
+			id = #{id}
+		</where>
+	</delete>
+	
+	<!-- 前台文章查询 -->
+	<select id="query1" resultType="entity.project.ProjectEntity">
+		select * from gf_article
+	</select>
+	
+	<!-- 查出总条数 -->
+	<select id="zshuju" parameterType="int" resultType="int">
+		select count(*) from gf_article
+		<if test=" value != null and value != '' ">
+			<where>
+				article_title like concat( '%' , #{article_title} , '%')
+			</where>
+		</if>
+	</select>
+	
+	<!-- 举报模糊查询 -->
+	<select id="jbmhcx" parameterType="String" resultType="entity.project.ProjectReport">
+		select articlet_code articletcode,articlet_name articletitle,report_descride reporting from gf_report 
+		<where>
+			articlet_name like concat( '%' , #{articletitle} , '%')
+		</where>
+	</select>
+	
+	<!-- 举报添加 -->
+	<insert id="insert1" parameterType="entity.project.ProjectReport">
+		insert into gf_report(articlet_name,report_descride)values(#{articletitle},#{reporting})
+	</insert>
+	
+	<!-- 举报查询 -->
+	<select id="chaxun" resultType="entity.project.ProjectReport">
+		select articlet_code articletcode,articlet_name articletitle,report_descride reporting from gf_report
+	</select>
+	
+	 
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.depaReciew.DepaReciewMapper">
+	
+	<!-- 查询所有部门 -->
+	<select id="queryAll" parameterType="java.util.Map" resultType="entity.depa_reciew.DepaReciewEntity">
+		select id,depa_code code,depa_name name,yes_no yesNo,depa_descride descride from gf_depa_reciew 
+			<if test="depaName != null and depaName != ''">
+				where depa_name like concat('%',#{depaName},'%')
+			</if>
+				LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<!--  -->
+	<select id="queryId" parameterType="int" resultType="entity.depa_reciew.DepaReciewEntity">
+		select id,depa_code code,depa_name name,yes_no yesNo,depa_descride descride from gf_depa_reciew where id = #{id}
+	</select>
+	
+	<!-- 往部门审核表中添加数据 -->
+	<insert id="add" parameterType="entity.depa_reciew.DepaReciewEntity">
+		insert into gf_depa_reciew(depa_code,depa_name,yes_no,depa_descride)values(#{code},#{name},#{yesNo},#{descride})
+	</insert>
+	
+	
+	
+	<!-- 查出一共有多少条数据 -->
+	<select id="count" resultType="int" parameterType="java.lang.String">
+		select count(*) from gf_depa_reciew
+		<if test="value != null and value != ''">
+			<where>
+				depa_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from gf_depa_reciew where id= #{id}
+	</delete>
+	
+</mapper>

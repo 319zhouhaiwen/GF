@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.depa.DepaMapper">
+	
+	<!-- 查询所有部门 -->
+	<select id="queryAll" parameterType="java.util.Map" resultType="entity.depa.DepaEntity">
+		select id,depa_code code,depa_name name from gf_depa
+		<if test="depaName != null and depaName != ''">
+			where depa_name like concat('%',#{depaName},'%')
+		</if>
+			LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<!--  添加部门 -->
+	<insert id="insert" parameterType="entity.depa.DepaEntity">
+		insert into gf_depa(depa_code,depa_name)values(#{code},#{name})
+	</insert>
+	
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from gf_depa where id= #{id}
+	</delete>
+	
+	<!-- 根据ID得到相应的数据 -->
+	<select id="queryId" parameterType="int" resultType="entity.depa.DepaEntity">
+		select id,depa_code code,depa_name name from gf_depa where id = #{id}
+	</select>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="entity.depa.DepaEntity">
+		update gf_depa
+		<if test="id != null and id != ''">
+			<set>
+				depa_name = #{name}
+			</set>
+			<where>
+				id = #{id}
+			</where>
+		</if>
+	</update>
+	
+	
+	<!-- 查出所有部门名称 -->
+	<select id="queryDepaName" resultType="entity.depa.DepaEntity">
+		select id,depa_code code,depa_name name from gf_depa
+	</select>
+	
+	<!-- 查出一共有多少条数据 -->
+	<select id="count" resultType="int" parameterType="java.lang.String">
+		select count(*) from gf_depa
+		<if test="value != null and value != ''">
+			<where>
+				depa_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+	
+	
+	<!-- 根据部门名字查出部门部门编号  -->
+	<select id="queryCode" resultType="java.lang.String" parameterType="java.lang.String">
+		select depa_code from gf_depa where depa_name = #{depaName}
+	</select>
+	
+	
+	<!-- 根据部门code查出部门名称 -->
+	<select id="queryName" resultType="java.lang.String" parameterType="java.lang.String">
+		select depa_code from gf_depa where depa_name = #{depaName}
+	</select>
+	
+	
+	
+	
+</mapper>

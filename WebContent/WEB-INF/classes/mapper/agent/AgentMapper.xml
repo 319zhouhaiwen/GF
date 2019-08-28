@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.agent.AgentMapper">  <!-- 命名空间  放接口路径-->
+	
+	<select id="agentcode" parameterType="java.lang.String" resultType="java.lang.String" >
+		select agent_code from gf_agent where agent_name = #{name}
+	</select>
+	
+	<select id="select" parameterType="java.util.Map" resultType="entity.agent.Agent">
+		select * from gf_agent  
+		<where>
+			<if test="name != null and name != ''">
+				agent_name like concat('%',#{name},'%')
+			</if>
+		</where>
+		LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<select id="agentquery" resultType="entity.agent.Agent">
+		select * from gf_agent
+	</select>
+	
+	<select id="selectcode" parameterType="java.lang.String" resultType="java.lang.String">
+		select code from gf_brand where brand_name = #{name}
+	</select>
+	
+	<select id="agentCount" parameterType="java.lang.String" resultType="int">
+		select count(*) from gf_agent where agent_name 
+		<if test="value != null and value != ''">
+			like concat('%',#{name},'%')
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="entity.agent.Agent">
+		insert into gf_agent (agent_name,agent_city,agent_tel,brand_code,brand_name,agent_code) values (#{agent_name},#{agent_city},#{agent_tel},#{brand_code},#{brand_name},#{agent_code})
+	</insert>
+	
+	<update id="update" parameterType="entity.agent.Agent">
+		update gf_agent set agent_name = #{agent_name},agent_city = #{agent_city},agent_tel = #{agent_tel},brand_code = #{brand_code},brand_name = #{brand_name} where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from gf_agent where id = #{id}
+	</delete>
+	
+	<select id="get" parameterType="int" resultType="entity.agent.Agent">
+		select * from gf_agent where id = #{id}
+	</select>
+	
+	<select id="count" parameterType="java.lang.String" resultType="int">
+		select count(*) from gf_agent where agent_name = #{name}
+	</select>
+	
+	<select id="Query" parameterType="java.lang.String" resultType="entity.agent.Agent">
+		select agent_name from gf_agent where brand_name = #{name}
+	</select>
+</mapper>

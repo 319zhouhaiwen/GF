@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.material.MaterialMapper"> 
+	<!-- 添加素材 -->
+	<insert id="insertMaterial" parameterType="entity.material.MaterialEntity">
+		insert into GF_material(material_code,material_name,material_url) values(#{materialCode},#{materialName},#{materialUrl})
+	</insert>
+	
+	<!-- 删除素材 -->
+	<delete id="deleteMaterial" parameterType="int">
+		delete from GF_material where id = #{materialId}
+	</delete>
+	
+	<!-- 修改素材 -->
+	<update id="updateMaterial" parameterType="entity.material.MaterialEntity">
+		update GF_material set material_name = #{materialName},material_url = #{materialUrl}
+		<where>
+	 		id = #{materialId}
+	 	</where>
+	</update>
+	
+	<!-- 查询所有素材 -->
+	<select id="queryMaterial" resultMap="returnMaterialEntity">
+		select * from gf_material
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryMaterialPage" parameterType="java.util.Map" resultMap="returnMaterialEntity">
+		select * from gf_material where 1=1
+		<if test="materialName != null and materialName != ''">
+			and material_name like concat('%',#{materialName},'%')
+		</if>
+		limit #{pageStartIndex},#{pageSize}
+	</select>
+	
+	<!-- 模糊查询总条数 -->
+	<select id="queryCount" parameterType="java.lang.String" resultType="int">
+		select count(*) from GF_material where 1=1
+		<if test="value != null and value != ''">
+			and material_name like concat('%',#{materialName},'%')
+		</if>
+		
+	</select>
+	
+	<!-- 根据素材编号查询单条素材数据， 用于修改时回显,编号不能修改 -->
+	<select id="queryOneMaterial" parameterType="int" resultMap="returnMaterialEntity">
+		select * from GF_material 
+		<where>
+	 		id = #{materialId}
+	 	</where>
+	</select>
+	
+	<!-- 检查素材名称不能重复 -->
+	<select id="checkMaterialName" parameterType="java.lang.String" resultType="int">
+		select count(*) from GF_material 
+		<where>
+			material_name=#{materialName}
+		</where>
+	</select>
+	
+	<!-- 修改时检查素材名称不能与其他相同 -->
+	<select id="checkUpdateMaterialName" parameterType="java.util.Map" resultType="int">
+		select count(*) from GF_material 
+		<where>
+			material_name = #{materialName} and id != #{materialId}
+		</where>
+	</select>
+	
+	<!-- 返回对象类型 -->
+	<resultMap type="entity.material.MaterialEntity" id="returnMaterialEntity">
+		<id property="materialId" column="id"/> 
+		<result property="materialUrl" column="material_url"/>
+		<result property="materialCode" column="material_code"/>
+		<result property="materialName" column="material_name"/>
+	</resultMap>
+	
+</mapper>

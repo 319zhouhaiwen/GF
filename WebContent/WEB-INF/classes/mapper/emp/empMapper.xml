@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.emp.EmpMapper">
+	<!-- 添加员工 -->
+	<insert id="insert" parameterType="entity.emp.EmpEntity">
+		insert into gf_emp(emp_name,emp_sex,emp_age,emp_tel,emp_root,emp_addr,emp_position,emp_state,emp_code,depa_code,depa_name,account,password) values(#{name},#{sex},#{age},#{tel},#{root},#{addr},#{position},#{state},#{empCode},#{depaName},#{depaCode},#{account},#{password})	
+	</insert>
+	
+	
+	
+	<!-- 查询所有员工 -->
+	<select id="queryAll" resultType="entity.emp.EmpEntity" parameterType="java.util.Map">
+		select id,emp_name name,emp_sex sex,emp_age age,emp_tel tel,emp_root root,emp_addr addr,emp_position position,emp_state state,emp_code empCode,depa_code depaCode,depa_name depaName,account account,password password from gf_emp 
+			<if test="empName != null and empName != ''">
+				where emp_name like concat('%',#{empName},'%')
+			</if>
+				LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	
+	<!-- 根据ID得到相应的数据 -->
+	<select id="queryId" parameterType="int" resultType="entity.emp.EmpEntity">
+		select id,emp_name name,emp_sex sex,emp_age age,emp_tel tel,emp_root root,emp_addr addr,emp_position position,emp_state state,emp_code empCode,depa_code depaCode,depa_name depaName,account account,password password from gf_emp where id=#{id}
+	</select>
+	
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="entity.emp.EmpEntity">
+		update gf_emp
+		<if test="id != null and id != ''">
+			<set>
+				emp_name= #{name},emp_sex= #{sex},emp_age= #{age},emp_tel= #{tel},emp_root= #{root},emp_addr= #{addr},emp_position= #{position},emp_state= #{state},depa_code= #{depaCode},depa_name= #{depaName},account= #{account},password= #{password}
+			</set>
+			<where>
+				id = #{id}
+			</where>
+		</if>
+	</update>
+	
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from gf_emp where id= #{id}
+	</delete>
+	
+	
+	<!-- 查出一共有多少条数据 -->
+	<select id="count" resultType="int" parameterType="java.lang.String">
+		select count(*) from gf_emp
+		<if test="value != null and value != ''">
+			<where>
+				emp_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+
+	
+	
+	
+</mapper>

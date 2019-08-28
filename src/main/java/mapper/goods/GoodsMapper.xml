@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.goods.GoodsMapper">
+	<!--新增  -->	
+	<insert id="add">
+		insert into GF_goods(goods_name,goods_price,goods_path,goods_describe,goods_color,type_code,code,agent_code)values(#{goodsName},#{goodsPrice},#{goodsPath},#{goodsDescribe},#{goodsColor},#{typeCode},#{code},#{agentCode})
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from GF_goods where id=#{id}
+	</delete>
+	<!-- 修改 -->
+	<update id="update">
+		update GF_goods set goods_name=#{goodsName},goods_price=#{goodsPrice},goods_path=#{goodsPath},goods_describe=#{goodsDescribe},goods_color=#{goodsColor},type_code=#{typeCode},code=#{code} where id=#{id}
+	</update>
+	
+	<!-- 查询所有 -->
+	<select id="query" resultType="entity.goods.GoodsEntity">
+		select code from gf_goods
+	</select>
+	
+	<!-- 模糊查询-->
+	<select id="queryMap" resultType="entity.goods.GoodsEntity">
+		select id,goods_name as goodsName,goods_price as goodsPrice,goods_path as goodsPath,goods_describe as goodsDescribe,goods_color as goodsColor,type_code as typeCode,code,agent_code as agentCode from gf_goods
+			<if test="dataName != null and dataName != ''">
+				where goods_name like  concat('%',#{dataName},'%')
+			</if>
+		LIMIT #{pageNow},#{pageSize} 
+	</select>
+	
+	<!-- 查询模糊查询总条数 -->
+	<select id="pageCount" resultType="int">
+		select count(*) from gf_goods
+		<if test="value !=null and value !=''">
+			 where goods_name like concat('%',#{dataName},'%')
+		</if>
+	</select>
+	
+	<!-- 修改回显 -->
+	<select id="query1" parameterType="int" resultType="entity.goods.GoodsEntity">
+		select id,goods_name as goodsName,goods_price as goodsPrice,goods_path as goodsPath,goods_describe as goodsDescribe,goods_color as goodsColor,type_code as typeCode,code,agent_code as agentCode from gf_goods where id=#{id}
+	</select>
+	
+	<!-- 判断名字是是否如存在 -->
+	<select id="queryName" resultType="int">
+		select count(*) from gf_goods where goods_name=#{name} and id!=#{id}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

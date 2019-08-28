@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.user.UserMapper">
+	<!-- 查询所有部门 有分页和模糊查询 -->
+	<select id="queryAll" resultType="entity.user.UserEntity" >
+		select id,user_name name,user_code code,user_sex sex,user_age age,user_tel tel,user_root root,user_account account,user_password password,user_addr addr,user_black black from gf_user 
+		<if test="userName != null and userName != ''">
+			where user_name like concat('%',#{userName},'%')
+		</if>
+			LIMIT #{pageNow},#{pageSize}
+	</select>
+	
+	<!-- 根据ID得到相应的数据 -->
+	<select id="queryId" parameterType="int" resultType="entity.user.UserEntity">
+		select id,user_name name,user_code code,user_sex sex,user_age age,user_tel tel,user_root root,user_account account,user_password password,user_addr addr,user_black black from gf_user where id= #{id}
+	</select>
+	<!-- 修改 -->
+	<update id="update" parameterType="entity.user.UserEntity">
+		update gf_user
+		<if test="id != null and id != ''">
+			<set>
+			user_name= #{name},user_sex= #{sex},user_age= #{age},user_tel= #{tel},user_root= #{root},user_account= #{account},user_password= #{password},user_addr= #{addr},user_black= #{black}
+			</set>
+			<where>
+				id = #{id}
+			</where>
+		</if>
+	</update>
+	
+	
+	<!-- 添加 -->
+	<insert id="insert" parameterType="entity.user.UserEntity">
+		insert into gf_user(user_name,user_code,user_sex,user_age,user_tel,user_root,user_account,user_password,user_addr,user_black)values	(#{name},#{code},#{sex},#{age},#{tel},#{root},#{account},#{password},#{addr},#{black})
+	</insert>
+	
+	
+	<!-- 查询所有部门 -->
+	<select id="querys" resultType="entity.user.UserEntity" >
+		select id,user_name name,user_code code,user_sex sex,user_age age,user_tel tel,user_root root,user_account account,user_password password,user_addr addr,user_black black from gf_user 
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="int">
+		delete from gf_user where id= #{id}
+	</delete>
+	
+	
+	<!-- 查出一共有多少条数据 -->
+	<select id="count" resultType="int" parameterType="java.lang.String">
+		select count(*) from gf_user
+		<if test="value != null and value != ''">
+			<where>
+				user_name like concat('%',#{value},'%')
+			</where>
+		</if>
+	</select>
+	
+</mapper>

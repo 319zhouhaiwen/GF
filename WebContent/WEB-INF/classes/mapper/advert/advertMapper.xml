@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.advert.AdvertMapper"> 
+	<!-- 新增广告 -->
+	<insert id="insertAdvert" parameterType="entity.advert.AdvertEntity">
+		insert into gf_advert(advert_url,descride,goods_code,advert_click,advert_show) values(#{advertUrl},#{descride},#{goodsCode},#{advertClick},#{advertShow})
+	</insert>
+
+	<!-- 删除广告 -->
+	<delete id="deleteAdvert" parameterType="int">
+		delete from gf_advert where id=#{id}
+	</delete>
+	
+	<!-- 修改广告 -->
+	<update id="updateAdvert" parameterType="entity.advert.AdvertEntity">
+		update gf_advert 
+		<set>
+			advert_url=#{advertUrl},descride=#{descride} where id=#{id}
+		</set>
+	</update>
+	
+	<!-- 修改广告的展示状态 -->
+	<update id="updateAdvertShow" parameterType="java.util.Map">
+		update gf_advert 
+		<set>
+			advert_show = #{advertShow} 
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<!-- 根据商品id查询单条广告数据， 用于修改时回显 -->
+	<select id="queryOneAdvert" parameterType="int" resultMap="returnAdvertEntity">
+		select * from gf_advert 
+		<where>
+			id = #{id}
+		</where>
+	</select>
+	
+	<!-- 查询所有广告，用List接 -->
+	<select id="queryAdvert" resultMap="returnAdvertEntity">
+		select * from gf_advert
+	</select>
+	
+	<!-- 分页查询广告 -->
+	<select id="queryAdvertPage" parameterType="java.util.Map" resultMap="returnAdvertEntity">
+		select * from gf_advert limit #{pageStartIndex},#{pageSize}
+	</select>
+	
+	<!-- 查询总条数 -->
+	<select id="queryCount" resultType="int">
+		select count(*) from gf_advert
+	</select>
+	
+	<!-- 返回对象类型 -->
+	<resultMap type="entity.advert.AdvertEntity" id="returnAdvertEntity">
+		<id property="id" column="id"/> 
+		<result property="advertUrl" column="advert_url"/>
+		<result property="descride" column="descride"/>
+		<result property="goodsCode" column="goods_code"/>
+		<result property="advertClick" column="advert_click"/>
+		<result property="advertShow" column="advert_show"/>
+	</resultMap>
+	
+</mapper>

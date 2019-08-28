@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="mapper.login.Floginmapper"> 
+	
+	
+	<select id="fcheckUser" resultType="int" parameterType="java.util.Map">
+		select count(*) from gf_user where user_account=#{account} and user_password=#{password}
+	</select>	
+	
+
+	<select id="ajaxcha" resultType="int"  parameterType="java.lang.String">
+		select count(*) from GF_user where user_account=#{account}
+	
+	</select>
+
+	<insert id="fzeng"  parameterType="entity.user.UserEntity">
+		insert into GF_user(user_account,user_password,user_name,user_sex,user_age,user_tel,user_addr)values(#{account},#{password},#{name},#{sex},#{age},#{tel},#{addr})
+	</insert>
+	
+</mapper>
